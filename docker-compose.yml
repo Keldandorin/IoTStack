@@ -1,0 +1,110 @@
+version: "3"
+services: 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana  
+    build:
+      context: ./Grafana
+      dockerfile: dockerfile
+      #restart: unless-stopped
+      #user: "0"
+    ports:
+      - 3000:3000
+    env_file:
+      - ./grafana/grafana.env
+    volumes:
+      - .\Grafana\data:/var/lib/grafana
+      - .\Grafana\log:/var/log/grafana
+        #- c:/Docker/Iot/Grafaba/config:/etc/grafana/grafana.ini
+  #influxdb
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    build:
+      context: ./influxdb
+      dockerfile: dockerfile
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    env_file:
+      - ./influxdb/influxdb.env
+    volumes:
+      - .\influxdb\data:/var/lib/influxdb
+  #Mosquitto
+  Mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    build:
+        context: ./mosquitto
+        dockerfile: dockerfile
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    #env_file:
+    #  -
+    volumes:
+      - .\mosquitto\mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - .\mosquitto\data:/mosquitto/data
+      - .\mosquitto\log:/mosquitto/log
+  #NodeRed    
+  NodeRed:
+    image: nodered/node-red:latest
+    container_name: NodeRed
+    build:
+      context: ./NodeRed
+      dockerfile: dockerfile
+    ports:
+      - "1880:1880"
+    env_file:
+      - ./nodered/nodered.env
+    volumes:
+      - .\nodered\data:/data
+#Adminer
+ # adminer:
+ #   image: "adminer:latest"
+ #   container_name: Adminer
+ #   build:
+ #     context: ./adminer
+ #     dockerfile: dockerfile
+ #   ports:
+ #     - "9080:8080"
+#Chronograf 
+  chronograf:
+    image: chronograf:latest
+    container_name: chronograf
+    build:
+      context: ./Chronograf
+      dockerfile: dockerfile
+    ports:
+      - "8888:8888"
+    #env_file:
+    #  - ./Chronograf/Chronograf.env
+    #volumes:
+    #  - .\Chronograf\data:/var/lib/Chronograf
+#Kapacitor
+  kapacitor:
+    image: kapacitor:latest
+    container_name: kapacitor
+    build:
+      context: ./kapacitor
+      dockerfile: dockerfile
+    ports:
+      - "9092:9092"
+    env_file:
+      - ./kapacitor/kapacitor.env
+    volumes:
+      - .\kapacitor\data:/var/lib/kapacitor
+#Hassio
+  hassio:
+    image: "homeassistant/home-assistant:latest"
+    container_name: "hassio"
+    build:
+      context: ./hassio
+      dockerfile: dockerfile
+    ports:
+      - 8123:8123
+    env_file:
+      - ./hassio/hassio.env
+    volumes:
+      - .\hassio\config:/config
