@@ -1,0 +1,12 @@
+**/db
+**/data
+**/config
+**/Home
+**/log
+**/Logs
+**/plugins
+**/provisioning
+*.db
+**/Data
+*.log
+**/_internal
