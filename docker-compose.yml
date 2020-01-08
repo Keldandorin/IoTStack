@@ -9,7 +9,7 @@ services:
       #restart: unless-stopped
       #user: "0"
     ports:
-      - 3000:3000
+      - 3001:3000
     env_file:
       - ./grafana/grafana.env
     volumes:
