@@ -108,3 +108,32 @@ services:
       - ./hassio/hassio.env
     volumes:
       - .\hassio\config:/config
+#Portainer
+  portainer:
+    image: "portainer/portainer"
+    container_name: "portainer"
+    build:
+      context: ./portainer
+      dockerfile: dockerfile
+    command: -H unix:///var/run/docker.sock
+    #restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - .\portainer\data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+#Nginx
+  nginx:
+    image: "jlesage/nginx-proxy-manager"      
+    container_name: "Nginx"
+    build:
+      context: -/nginx
+      dockerfile: dockerfile
+    ports:
+      - 80:8080
+      - 443:4443
+      - 81:8181
+    volumes: 
+      - .\nginx\data:/config
+
