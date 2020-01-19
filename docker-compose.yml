@@ -1,5 +1,19 @@
 version: "3"
-services: 
+services:
+#Nginx
+  ProxyManager:
+    image: jlesage/nginx-proxy-manager      
+    container_name: ProxyManager
+    build:
+      context: ./ProxyManager
+      dockerfile: dockerfile
+    ports:
+      - 8080:8080
+      - 4443:4443
+      - 8181:8181
+    volumes: 
+      - .\ProxyManager\data:/config 
+ #Grafana     
   grafana:
     image: grafana/grafana:latest
     container_name: grafana  
@@ -109,16 +123,18 @@ services:
   #     - ./hassio/hassio.env
   #   volumes:
   #     - .\hassio\config:/config
-  #Nginx
-  nginx:
-    image: "jlesage/nginx-proxy-manager"      
-    container_name: "Nginx"
-    build:
-      context: ./nginx
-      dockerfile: dockerfile
-    ports:
-       - 8080:8080
-       - 4443:4443
-       - 8181:8181
-    volumes: 
-      - ./nginx/data:/config
+# #Nginx
+#     nginx:
+#       image: "nginx"      
+#       container_name: "nginx"
+#       build:
+#         context: ./nginx
+#         dockerfile: dockerfile
+#       ports:
+#         - 8080:8080
+#         - 4443:4443
+#         - 8181:8181
+#       env_file:
+#       - ./nginx/nginx.env
+#       volumes: 
+#         - .\nginx\data:/etc/nginx
