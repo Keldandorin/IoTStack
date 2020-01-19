@@ -110,7 +110,7 @@ services:
       - 9000:9000
       - 8000:8000
     volumes:
-      - .\portainer\data:/data
+      - .\portainer\data:C:\data
       #- /var/run/docker.sock:/var/run/docker.sock
       - \\.\pipe\docker_engine:\\.\pipe\docker_engine
 # #Nginx
