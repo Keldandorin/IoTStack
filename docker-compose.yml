@@ -1,5 +1,19 @@
 version: "3"
-services: 
+services:
+#Nginx
+  ProxyManager:
+    image: jlesage/nginx-proxy-manager      
+    container_name: ProxyManager
+    build:
+      context: ./ProxyManager
+      dockerfile: dockerfile
+    ports:
+      - 8080:8080
+      - 4443:4443
+      - 8181:8181
+    volumes: 
+      - .\ProxyManager\data:/config 
+ #Grafana     
   grafana:
     image: grafana/grafana:latest
     container_name: grafana  
@@ -9,7 +23,7 @@ services:
       #restart: unless-stopped
       #user: "0"
     ports:
-      - 3000:3000
+      - 3001:3000
     env_file:
       - ./grafana/grafana.env
     volumes:
@@ -97,28 +111,44 @@ services:
 #    volumes:
 #      - .\kapacitor\data:/var/lib/kapacitor
 #Hassio
-  # hassio:
-  #   image: "homeassistant/home-assistant:latest"
-  #   container_name: "hassio"
-  #   build:
-  #     context: ./hassio
-  #     dockerfile: dockerfile
-  #   ports:
-  #     - 8123:8123
-  #   env_file:
-  #     - ./hassio/hassio.env
-  #   volumes:
-  #     - .\hassio\config:/config
-  #Nginx
+  hassio:
+    image: "homeassistant/home-assistant:latest"
+    container_name: "hassio"
+    build:
+      context: ./hassio
+      dockerfile: dockerfile
+    ports:
+      - 8123:8123
+    env_file:
+      - ./hassio/hassio.env
+    volumes:
+      - .\hassio\config:/config
+#Portainer
+  portainer:
+    image: "portainer/portainer"
+    container_name: "portainer"
+    build:
+      context: ./portainer
+      dockerfile: dockerfile
+    command: -H unix:///var/run/docker.sock
+    #restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - .\portainer\data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+#Nginx
   nginx:
     image: "jlesage/nginx-proxy-manager"      
     container_name: "Nginx"
     build:
-      context: ./nginx
+      context: -/nginx
       dockerfile: dockerfile
     ports:
-       - 8080:8080
-       - 4443:4443
-       - 8181:8181
+      - 80:8080
+      - 443:4443
+      - 81:8181
     volumes: 
-      - ./nginx/data:/config
+      - .\nginx\data:/config
+
