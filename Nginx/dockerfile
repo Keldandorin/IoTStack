@@ -1,1 +1,1 @@
-FROM jlesage/nginx-proxy-manager
+FROM nginx
