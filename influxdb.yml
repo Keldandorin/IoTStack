@@ -1,0 +1,43 @@
+version: "3.7"
+services:
+#influxdb
+    influxdb:
+        image: influxdb:latest
+        container_name: influxdb
+        build:
+            context: ./influxdb
+            dockerfile: dockerfile
+        ports:
+        - "8083:8083"
+        - "8086:8086"
+        - "8090:8090"
+        env_file:
+        - ./influxdb/influxdb.env
+        volumes:
+        - .\influxdb\data:/var/lib/influxdb
+        networks:
+            - Influx-net
+#Chronograf 
+    chronograf:
+        image: chronograf:latest
+        container_name: chronograf
+        #entrypoint: '--influxdb-url=http://influxdb:8086'
+        build:
+            context: ./Chronograf
+            dockerfile: dockerfile
+        ports:
+        - "8888:8888"
+        #env_file:
+        #  - ./Chronograf/Chronograf.env
+        volumes:
+        - .\chronograf\data:/var/lib/chronograf
+        networks:
+            - Influx-net
+        depends_on: ['influxdb']
+networks:
+    Influx-net:
+        name: Influx-net
+volumes:
+    influxdb_data:
+    chronograf_data:
+    

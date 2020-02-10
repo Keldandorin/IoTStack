@@ -1,0 +1,31 @@
+version: "2"
+services:
+#influxdb
+    influxdb:
+        image: influxdb:latest
+        container_name: influxdb
+        ports:
+        - "8083:8083"
+        - "8086:8086"
+        - "8090:8090"
+        volumes:
+        - influxdb_data:/var/lib/influxdb
+        networks:
+            - Influx-net
+#Chronograf 
+    chronograf:
+        image: chronograf:latest
+        container_name: chronograf
+        ports:
+        - "8888:8888"
+        volumes:
+        - chronograf_data:/var/lib/chronograf
+        networks:
+            - Influx-net
+        depends_on: ['influxdb']
+networks:
+    Influx-net:
+        name: Influx-net
+volumes:
+    influxdb_data:
+    chronograf_data:
